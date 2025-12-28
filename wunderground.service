@@ -1,0 +1,12 @@
+[Unit]
+Description=Weather Station Prometheus Exporter
+
+[Service]
+Type=simple
+WorkingDirectory=/home/kevin/0x972.info/wunderground2prom
+ExecStart=/usr/bin/python3 wunderground.py --bind=127.0.0.1 --port=12100
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

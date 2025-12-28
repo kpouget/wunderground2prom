@@ -1,0 +1,143 @@
+2025-12-28 14:14:19.051 INFO     river_flow.py - Expose river flow readings in Prometheus format
+
+Press Ctrl+C to exit!
+
+
+2025-12-28 14:20:28.312 INFO     river_flow.py - Expose river flow readings in Prometheus format
+
+Press Ctrl+C to exit!
+
+
+2025-12-28 14:20:28.314 INFO     Starting river flow monitoring (update interval: 300s)
+2025-12-28 14:20:28.520 INFO     Dordogne flow: 233.9 m3/s
+2025-12-28 14:20:28.646 INFO     Dordogne height: 1.29 m
+2025-12-28 14:20:28.781 INFO     Lot flow: 428.4 m3/s
+2025-12-28 14:20:28.909 INFO     Lot height: 2.57 m
+2025-12-28 14:20:28.912 INFO     Listening on http://0.0.0.0:8001
+2025-12-28 14:20:28.913 INFO     Monitoring river flows: Dordogne, Lot
+2025-12-28 14:23:13.917 INFO     river_flow.py - Expose river flow readings in Prometheus format
+
+Press Ctrl+C to exit!
+
+
+2025-12-28 14:24:37.233 INFO     river_flow.py - Expose river flow readings in Prometheus format
+
+Press Ctrl+C to exit!
+
+
+2025-12-28 14:24:37.235 INFO     Starting river flow monitoring (update interval: 300s)
+2025-12-28 14:24:37.371 INFO     Dordogne flow: 219.4 m3/s
+2025-12-28 14:24:37.504 INFO     Dordogne height: 1.29 m
+2025-12-28 14:24:37.634 INFO     Lot flow: 428.4 m3/s
+2025-12-28 14:24:37.762 INFO     Lot height: 2.57 m
+2025-12-28 14:24:37.765 INFO     Listening on http://0.0.0.0:8001
+2025-12-28 14:24:37.765 INFO     Monitoring rivers - Flow & Height: Dordogne (P230001001, P207002002), Lot (O823153002)
+2025-12-28 18:07:43.311 INFO     river_flow.py - Expose river flow readings in Prometheus format
+
+Press Ctrl+C to exit!
+
+
+2025-12-28 18:07:43.313 INFO     Starting river flow monitoring (update interval: 300s)
+2025-12-28 18:07:43.490 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:07:43.619 INFO     Dordogne height: 1.28 m
+2025-12-28 18:07:43.751 INFO     Lot flow: 349.5 m3/s
+2025-12-28 18:07:43.879 INFO     Lot height: 2.36 m
+2025-12-28 18:07:43.880 INFO     Listening on http://0.0.0.0:8001
+2025-12-28 18:07:43.881 INFO     Monitoring rivers - Flow & Height: Dordogne (P207002002), Lot (O823153002)
+2025-12-28 18:12:44.011 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:12:44.141 INFO     Dordogne height: 1.28 m
+2025-12-28 18:12:44.270 INFO     Lot flow: 349.5 m3/s
+2025-12-28 18:12:44.398 INFO     Lot height: 2.36 m
+2025-12-28 18:16:12.954 INFO     river_flow.py - Expose river flow readings in Prometheus format
+
+Press Ctrl+C to exit!
+
+
+2025-12-28 18:17:44.532 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:17:44.659 INFO     Dordogne height: 1.28 m
+2025-12-28 18:17:44.791 INFO     Lot flow: 349.5 m3/s
+2025-12-28 18:17:44.918 INFO     Lot height: 2.36 m
+2025-12-28 18:22:45.083 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:22:45.213 INFO     Dordogne height: 1.28 m
+2025-12-28 18:22:45.347 INFO     Lot flow: 345.8 m3/s
+2025-12-28 18:22:45.476 INFO     Lot height: 2.35 m
+2025-12-28 18:27:45.607 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:27:45.745 INFO     Dordogne height: 1.28 m
+2025-12-28 18:27:45.880 INFO     Lot flow: 345.8 m3/s
+2025-12-28 18:27:46.015 INFO     Lot height: 2.35 m
+2025-12-28 18:32:46.150 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:32:46.277 INFO     Dordogne height: 1.28 m
+2025-12-28 18:32:46.411 INFO     Lot flow: 345.8 m3/s
+2025-12-28 18:32:46.539 INFO     Lot height: 2.35 m
+2025-12-28 18:37:46.699 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:37:46.830 INFO     Dordogne height: 1.28 m
+2025-12-28 18:37:46.962 INFO     Lot flow: 342.9 m3/s
+2025-12-28 18:37:47.094 INFO     Lot height: 2.35 m
+2025-12-28 18:42:47.224 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:42:47.355 INFO     Dordogne height: 1.28 m
+2025-12-28 18:42:47.493 INFO     Lot flow: 342.9 m3/s
+2025-12-28 18:42:47.620 INFO     Lot height: 2.35 m
+2025-12-28 18:47:47.745 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:47:47.874 INFO     Dordogne height: 1.28 m
+2025-12-28 18:47:48.006 INFO     Lot flow: 342.9 m3/s
+2025-12-28 18:47:48.142 INFO     Lot height: 2.35 m
+2025-12-28 18:52:48.286 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:52:48.415 INFO     Dordogne height: 1.28 m
+2025-12-28 18:52:48.544 INFO     Lot flow: 339.2 m3/s
+2025-12-28 18:52:48.674 INFO     Lot height: 2.34 m
+2025-12-28 18:57:48.804 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 18:57:48.939 INFO     Dordogne height: 1.28 m
+2025-12-28 18:57:49.075 INFO     Lot flow: 339.2 m3/s
+2025-12-28 18:57:49.206 INFO     Lot height: 2.34 m
+2025-12-28 19:02:49.338 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:02:49.467 INFO     Dordogne height: 1.28 m
+2025-12-28 19:02:49.601 INFO     Lot flow: 339.2 m3/s
+2025-12-28 19:02:49.731 INFO     Lot height: 2.34 m
+2025-12-28 19:07:49.890 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:07:50.018 INFO     Dordogne height: 1.28 m
+2025-12-28 19:07:50.155 INFO     Lot flow: 336 m3/s
+2025-12-28 19:07:50.286 INFO     Lot height: 2.33 m
+2025-12-28 19:12:50.423 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:12:50.552 INFO     Dordogne height: 1.28 m
+2025-12-28 19:12:50.681 INFO     Lot flow: 336 m3/s
+2025-12-28 19:12:50.812 INFO     Lot height: 2.33 m
+2025-12-28 19:17:50.944 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:17:51.073 INFO     Dordogne height: 1.28 m
+2025-12-28 19:17:51.205 INFO     Lot flow: 336 m3/s
+2025-12-28 19:17:51.333 INFO     Lot height: 2.33 m
+2025-12-28 19:22:51.485 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:22:51.615 INFO     Dordogne height: 1.28 m
+2025-12-28 19:22:51.749 INFO     Lot flow: 331.2 m3/s
+2025-12-28 19:22:51.880 INFO     Lot height: 2.31 m
+2025-12-28 19:27:52.019 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:27:52.148 INFO     Dordogne height: 1.28 m
+2025-12-28 19:27:52.286 INFO     Lot flow: 331.2 m3/s
+2025-12-28 19:27:52.420 INFO     Lot height: 2.31 m
+2025-12-28 19:32:52.556 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:32:52.682 INFO     Dordogne height: 1.28 m
+2025-12-28 19:32:52.814 INFO     Lot flow: 331.2 m3/s
+2025-12-28 19:32:52.945 INFO     Lot height: 2.31 m
+2025-12-28 19:37:53.073 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:37:53.198 INFO     Dordogne height: 1.28 m
+2025-12-28 19:37:53.331 INFO     Lot flow: 329.8 m3/s
+2025-12-28 19:37:53.462 INFO     Lot height: 2.31 m
+2025-12-28 19:42:53.594 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:42:53.723 INFO     Dordogne height: 1.28 m
+2025-12-28 19:42:53.858 INFO     Lot flow: 329.8 m3/s
+2025-12-28 19:42:53.988 INFO     Lot height: 2.31 m
+2025-12-28 19:47:54.117 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:47:54.247 INFO     Dordogne height: 1.28 m
+2025-12-28 19:47:54.378 INFO     Lot flow: 329.8 m3/s
+2025-12-28 19:47:54.510 INFO     Lot height: 2.31 m
+2025-12-28 19:52:54.638 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:52:54.767 INFO     Dordogne height: 1.28 m
+2025-12-28 19:52:54.902 INFO     Lot flow: 326.2 m3/s
+2025-12-28 19:52:55.036 INFO     Lot height: 2.3 m
+2025-12-28 19:57:55.185 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 19:57:55.319 INFO     Dordogne height: 1.28 m
+2025-12-28 19:57:55.454 INFO     Lot flow: 326.2 m3/s
+2025-12-28 19:57:55.585 INFO     Lot height: 2.3 m
+2025-12-28 20:02:55.713 INFO     Dordogne flow: 213.7 m3/s
+2025-12-28 20:02:55.838 INFO     Dordogne height: 1.28 m
+2025-12-28 20:02:55.973 INFO     Lot flow: 326.2 m3/s
+2025-12-28 20:02:56.106 INFO     Lot height: 2.3 m

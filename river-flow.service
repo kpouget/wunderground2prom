@@ -1,0 +1,12 @@
+[Unit]
+Description=River Flow Prometheus Exporter
+
+[Service]
+Type=simple
+WorkingDirectory=/home/kevin/0x972.info/wunderground2prom
+ExecStart=/usr/bin/python3 river_flow.py --bind=127.0.0.1 --port=12101
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
