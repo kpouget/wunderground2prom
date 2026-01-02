@@ -55,6 +55,12 @@ GAUGES = {
 
     'pressure': ("Pression (in hPa)", ["station_id"]),
     'temperature': ("Temperature", ["mode", "station_id"]),
+
+    # Health monitoring metrics
+    'last_fetch_time': ("Unix timestamp of last successful data fetch", ["station_id"]),
+    'last_fetch_duration': ("Duration of last successful API request (seconds)", ["station_id"]),
+    'successful_requests_total': ("Total number of successful API requests", ["station_id"]),
+    'temperature_last_change': ("Unix timestamp when temperature last changed", ["station_id"]),
 }
 
 PROPS = {
@@ -109,6 +115,10 @@ def create_labeled_metrics(gauges, props_def, station_id):
 
 GAUGES_REGISTRY = prepare_gauges(GAUGES)
 
+# Health monitoring tracking
+previous_temperatures = {}  # station_id -> temperature value
+successful_request_counts = {}  # station_id -> count
+
 # ---
 
 def get_data(station_id, api_key):
@@ -127,34 +137,55 @@ def get_data(station_id, api_key):
         data = data["observations"][0]
         mtr = data.pop("metric")
         data.update(mtr)
-        return data
+        # Return both data and duration for successful requests
+        return data, elapsed
     except socket.timeout:
         elapsed = time.time() - start_time
         logging.warning(f"API request timeout for station {station_id} after {elapsed:.2f}s")
-        return None
+        return None, None
     except urllib.error.URLError as e:
         elapsed = time.time() - start_time
         logging.error(f"Network error for station {station_id} after {elapsed:.2f}s: {e}")
-        return None
+        return None, None
     except Exception as e:
         elapsed = time.time() - start_time
         logging.error(f"Unexpected error for station {station_id} after {elapsed:.2f}s: {e}")
-        return None
+        return None, None
 
 def get_wunderground(station):
     station_id = station["id"]
     station_name = station["name"]
     api_key = station["api_key"]
 
-    data = get_data(station_id, api_key)
+    data, fetch_duration = get_data(station_id, api_key)
     has_errors = []
+
     if not data:
         logging.warning(f"No data available for station {station_name} ({station_id}) at {datetime.datetime.now()}")
         return
 
-    # Create labeled metrics for this station
+    current_time = time.time()
+
+    # Create labeled metrics for this station (weather data)
     metrics = create_labeled_metrics(GAUGES_REGISTRY, PROPS, station_id)
 
+    # Create health monitoring metrics for this station
+    health_metrics = {}
+    health_metrics['last_fetch_time'] = GAUGES_REGISTRY['last_fetch_time'].labels(station_id=station_id)
+    health_metrics['last_fetch_duration'] = GAUGES_REGISTRY['last_fetch_duration'].labels(station_id=station_id)
+    health_metrics['successful_requests_total'] = GAUGES_REGISTRY['successful_requests_total'].labels(station_id=station_id)
+    health_metrics['temperature_last_change'] = GAUGES_REGISTRY['temperature_last_change'].labels(station_id=station_id)
+
+    # Update health metrics for successful fetch
+    health_metrics['last_fetch_time'].set(current_time)
+    health_metrics['last_fetch_duration'].set(fetch_duration)
+
+    # Increment successful request count
+    successful_request_counts[station_id] = successful_request_counts.get(station_id, 0) + 1
+    health_metrics['successful_requests_total'].set(successful_request_counts[station_id])
+
+    # Process weather data
+    current_temp = None
     for key, gauge in metrics.items():
         try:
             value = data[key]
@@ -165,11 +196,25 @@ def get_wunderground(station):
             continue
         if key == "pressure":
             value -= PRESSURE_OFFSET
+
+        # Track temperature for change detection
+        if key == "temp":
+            current_temp = value
+
         try:
             gauge.set(value)
         except:
             import pdb;pdb.set_trace()
             pass
+
+    # Update temperature change tracking
+    if current_temp is not None:
+        previous_temp = previous_temperatures.get(station_id)
+        if previous_temp != current_temp:
+            health_metrics['temperature_last_change'].set(current_time)
+            previous_temperatures[station_id] = current_temp
+            logging.debug(f"Temperature changed for {station_id}: {previous_temp} -> {current_temp}")
+
     if has_errors:
         logging.info(f"Station {station_name} ({station_id}) - Missing keys: {', '.join(has_errors)}")
         logging.info(f"Station {station_name} ({station_id}) - Available keys: {', '.join(data.keys())}")
