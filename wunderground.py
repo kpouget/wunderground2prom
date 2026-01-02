@@ -2,6 +2,7 @@
 import os
 import random
 import requests
+import socket
 import time
 import logging
 import argparse
@@ -113,17 +114,31 @@ GAUGES_REGISTRY = prepare_gauges(GAUGES)
 def get_data(station_id, api_key):
     url = f"https://api.weather.com/v2/pws/observations/current?apiKey={api_key}&stationId={station_id}&numericPrecision=decimal&format=json&units=m"
 
+    start_time = time.time()
     try:
         req = urllib.request.Request(url,  headers={'User-Agent': 'Mozilla/5.0'})
-        response = urllib.request.urlopen(req).read()
+        # Add 30-second timeout to prevent hanging
+        response = urllib.request.urlopen(req, timeout=30).read()
+
+        elapsed = time.time() - start_time
+        logging.debug(f"API request for {station_id} completed in {elapsed:.2f}s")
 
         data = json.loads(response)
         data = data["observations"][0]
         mtr = data.pop("metric")
         data.update(mtr)
         return data
+    except socket.timeout:
+        elapsed = time.time() - start_time
+        logging.warning(f"API request timeout for station {station_id} after {elapsed:.2f}s")
+        return None
+    except urllib.error.URLError as e:
+        elapsed = time.time() - start_time
+        logging.error(f"Network error for station {station_id} after {elapsed:.2f}s: {e}")
+        return None
     except Exception as e:
-        logging.error(e)
+        elapsed = time.time() - start_time
+        logging.error(f"Unexpected error for station {station_id} after {elapsed:.2f}s: {e}")
         return None
 
 def get_wunderground(station):

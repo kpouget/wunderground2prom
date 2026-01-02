@@ -54,7 +54,8 @@ def get_level(river_code, serie):
 
     url = URL.format(river_code, serie)
     try:
-        content = urllib.request.urlopen(url).read().decode('utf-8')
+        # Add 30-second timeout to prevent hanging
+        content = urllib.request.urlopen(url, timeout=30).read().decode('utf-8')
         measures = json.loads(content)
         hauteur = measures["Serie"]["ObssHydro"][-1][1]
 
