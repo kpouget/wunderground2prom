@@ -61,6 +61,7 @@ GAUGES = {
     'last_fetch_duration': ("Duration of last successful API request (seconds)", ["station_id"]),
     'successful_requests_total': ("Total number of successful API requests", ["station_id"]),
     'temperature_last_change': ("Unix timestamp when temperature last changed", ["station_id"]),
+    'station_data_age': ("Age of station data in seconds (how old the station's last update is)", ["station_id"]),
 }
 
 PROPS = {
@@ -82,6 +83,7 @@ PROPS = {
     "solarRadiation": ('sun_rad', {}),
 
     "pressure": ('pressure', {}),
+    "station_data_age": ('station_data_age', {}),
 }
 
 def prepare_gauges(gauges_def):
@@ -135,6 +137,44 @@ def get_data(station_id, api_key):
 
         data = json.loads(response)
         data = data["observations"][0]
+
+        # Extract station update timestamp before processing metric data
+        station_update_time = None
+        for timestamp_field in ["obsTimeUtc", "epoch", "obsTimeLocal", "timestamp"]:
+            if timestamp_field in data:
+                try:
+                    if timestamp_field == "obsTimeUtc":
+                        # Parse ISO format: "2024-01-01T10:15:00Z"
+                        station_update_time = datetime.datetime.fromisoformat(data[timestamp_field].replace('Z', '+00:00')).timestamp()
+                    elif timestamp_field == "epoch":
+                        # Direct Unix timestamp
+                        station_update_time = float(data[timestamp_field])
+                    elif timestamp_field == "obsTimeLocal":
+                        # Parse local time format, assume it's close enough for age calculation
+                        station_update_time = datetime.datetime.fromisoformat(data[timestamp_field]).timestamp()
+                    else:
+                        # Try parsing as Unix timestamp or ISO format
+                        if isinstance(data[timestamp_field], (int, float)):
+                            station_update_time = float(data[timestamp_field])
+                        else:
+                            station_update_time = datetime.datetime.fromisoformat(data[timestamp_field]).timestamp()
+
+                    logging.debug(f"Station {station_id} data timestamp ({timestamp_field}): {data[timestamp_field]} -> {station_update_time}")
+                    break
+                except (ValueError, TypeError) as e:
+                    logging.debug(f"Failed to parse {timestamp_field} for station {station_id}: {e}")
+                    continue
+
+        # Add station data age to the data
+        if station_update_time:
+            current_time = time.time()
+            station_data_age = current_time - station_update_time
+            data["station_data_age"] = station_data_age
+            logging.debug(f"Station {station_id} data is {station_data_age:.1f} seconds old")
+        else:
+            logging.warning(f"No valid timestamp found in station {station_id} data")
+            logging.debug(f"Available keys: {list(data.keys())}")
+
         mtr = data.pop("metric")
         data.update(mtr)
         # Return both data and duration for successful requests
@@ -175,6 +215,7 @@ def get_wunderground(station):
     health_metrics['last_fetch_duration'] = GAUGES_REGISTRY['last_fetch_duration'].labels(station_id=station_id)
     health_metrics['successful_requests_total'] = GAUGES_REGISTRY['successful_requests_total'].labels(station_id=station_id)
     health_metrics['temperature_last_change'] = GAUGES_REGISTRY['temperature_last_change'].labels(station_id=station_id)
+    health_metrics['station_data_age'] = GAUGES_REGISTRY['station_data_age'].labels(station_id=station_id)
 
     # Update health metrics for successful fetch
     health_metrics['last_fetch_time'].set(current_time)
@@ -197,9 +238,12 @@ def get_wunderground(station):
         if key == "pressure":
             value -= PRESSURE_OFFSET
 
-        # Track temperature for change detection
+        # Track temperature for change detection (prefer "temp" but fallback to others)
         if key == "temp":
             current_temp = value
+        elif current_temp is None and key in ["dewpt", "heatIndex", "windChill"]:
+            current_temp = value
+            logging.debug(f"Using {key} for temperature change detection: {value}")
 
         try:
             gauge.set(value)
@@ -210,10 +254,25 @@ def get_wunderground(station):
     # Update temperature change tracking
     if current_temp is not None:
         previous_temp = previous_temperatures.get(station_id)
-        if previous_temp != current_temp:
+
+        # Handle floating point precision and first reading
+        if previous_temp is None:
+            # First reading - always set but don't consider it a "change"
             health_metrics['temperature_last_change'].set(current_time)
             previous_temperatures[station_id] = current_temp
-            logging.debug(f"Temperature changed for {station_id}: {previous_temp} -> {current_temp}")
+            logging.debug(f"First temperature reading for {station_id}: {current_temp}")
+        else:
+            # Use small tolerance for floating point comparison
+            temp_diff = abs(previous_temp - current_temp)
+            if temp_diff >= 0.05:  # 0.05°C tolerance
+                health_metrics['temperature_last_change'].set(current_time)
+                previous_temperatures[station_id] = current_temp
+                logging.debug(f"Temperature changed for {station_id}: {previous_temp} -> {current_temp} (diff: {temp_diff:.2f})")
+            else:
+                logging.debug(f"Temperature stable for {station_id}: {current_temp} (diff: {temp_diff:.3f})")
+    else:
+        logging.warning(f"No temperature data available for change detection for {station_id}")
+        logging.debug(f"Available data keys: {list(data.keys())}")
 
     if has_errors:
         logging.info(f"Station {station_name} ({station_id}) - Missing keys: {', '.join(has_errors)}")
