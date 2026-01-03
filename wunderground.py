@@ -20,7 +20,7 @@ from prometheus_client import start_http_server, Gauge, Histogram, CollectorRegi
 logging.basicConfig(
     format='%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s',
     level=logging.INFO,
-    handlers=[logging.FileHandler("enviroplus_exporter.log"),
+    handlers=[logging.FileHandler("wunderground2prom.log"),
               logging.StreamHandler()],
     datefmt='%Y-%m-%d %H:%M:%S')
 
