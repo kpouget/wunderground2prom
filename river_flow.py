@@ -49,7 +49,7 @@ RIVER_STATIONS = [
     {
         "river": "Dordogne",
         "station": "Carennac",
-        "station_id": "P207002002",
+        "station_id": "P207002001",
         "description": "Dordogne river at Carennac"
     },
     {
