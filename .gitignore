@@ -1,3 +1,4 @@
 .env
 wunderground2prom.log
 river_flow_exporter.log
+stations.yaml
